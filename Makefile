@@ -6,13 +6,14 @@
 #    By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/21 11:32:21 by jebrocho          #+#    #+#              #
-#    Updated: 2019/04/03 16:19:28 by jebrocho         ###   ########.fr        #
+#    Updated: 2019/04/09 18:01:43 by jebrocho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRC = src/main.c src/ft_split.c src/ft_split_whitespace.c src/error.c
+SRC = src/main.c src/ft_split.c src/ft_split_whitespace.c src/error.c \
+	  	src/env.c src/builtin.c src/tools.c src/split_env.c
 
 OBJ = $(SRC: .c=.o)
 
@@ -20,7 +21,7 @@ LIB = libft/libft.a
 
 CC = gcc
 
-FLAGS = -Wall -Wextra -Werror -ltermcap
+FLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 

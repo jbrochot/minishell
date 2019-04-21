@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_is_dir.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/06 14:35:59 by jebrocho          #+#    #+#             */
-/*   Updated: 2019/04/03 16:28:18 by jebrocho         ###   ########.fr       */
+/*   Created: 2019/04/21 18:26:48 by jebrocho          #+#    #+#             */
+/*   Updated: 2019/04/21 18:37:04 by jebrocho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <unistd.h>
-# include <sys/wait.h>
-# include <dirent.h>
-# include "../libft/libft.h"
-# include <functions.h>
-# include <termios.h>
-# include <term.h>
-# include <sys/types.h>
-# include <curses.h>
-# include "functions.h"
-
-char **g_env;
-
-#endif
+int		ft_is_dir(char *s)
+{
+	if (lstat(s, &st) < 0)
+		return (0);
+	if (S_ISDIR(st.st_mode))
+		return (1);
+	return (0);
+}

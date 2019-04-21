@@ -6,7 +6,7 @@
 /*   By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 14:35:59 by jebrocho          #+#    #+#             */
-/*   Updated: 2019/04/03 16:28:18 by ezonda           ###   ########.fr       */
+/*   Updated: 2019/04/21 18:47:50 by jebrocho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@
 # include <fcntl.h>
 # include <limits.h>
 # include "printf/includes/ft_printf.h"
+# include <sys/stat.h>
 
 # define BUFF_SIZE 4096
+
+struct stat			st;
 
 typedef struct		s_list
 {
@@ -95,5 +98,7 @@ int					ft_power(int n, int power);
 int					ft_is_prime(int nb);
 
 int					get_next_line(const int fd, char **line);
+
+int		ft_is_dir(char *s);
 
 #endif
