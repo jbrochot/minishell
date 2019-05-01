@@ -1,27 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bultin.c                                           :+:      :+:    :+:   */
+/*   tools_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/15 14:08:42 by jebrocho          #+#    #+#             */
-/*   Updated: 2019/04/15 14:09:02 by jebrocho         ###   ########.fr       */
+/*   Created: 2019/04/23 13:26:21 by jebrocho          #+#    #+#             */
+/*   Updated: 2019/04/23 13:26:24 by jebrocho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int  builtin(char *buf)
+void rm_last(void)
 {
-  char **line;
+    int  i;
+    int  j;
 
-  line = parse_line(buf);
-  if (!line)
-    return (1);
-  if (ft_strcmp(line[0], "exit") == 0)
-    line[1] != NULL ? exit(ft_atoi(line[1])) : exit(0);
-  if (ft_strcmp(line[0], "cd") == 0)
-    return (ft_cd(line));
-  return (0);
+    j = 0;
+    i = line_of_env("PWD");
+    while (g_env[i][j])
+      j++;
+    j--;
+    if (j == 4)
+      return ;
+    while (g_env[i][j] != '/')
+      j--;
+    g_env[i][j] = '\0';
+}
+
+void add_last(char *str)
+{
+  int i;
+
+  i = line_of_env("PWD");
+  g_env[i] = ft_strjoin(g_env[i], "/");
+  g_env[i] = ft_strjoin(g_env[i], str);
 }

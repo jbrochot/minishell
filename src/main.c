@@ -33,10 +33,6 @@ int exec_all(char **exe, char *buf)
 
 	i = -1;
 	line = parse_line(buf);
-/*	if (buf[0] == '"')
-		line = parse_command(buf);
-	else
-		line = ft_split_whitespace(buf);*/
 	pid = fork();
 	while(exe[++i])
 	{
@@ -87,7 +83,6 @@ int ft_read(void)
 	exe = ft_split(path);
 	free(path);
 	exec_all(exe, buf);
-
 	return (1);
 }
 

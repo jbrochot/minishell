@@ -13,7 +13,8 @@
 NAME = minishell
 
 SRC = src/main.c src/ft_split.c src/ft_split_whitespace.c src/error.c \
-	  	src/env.c src/builtin.c src/tools.c src/split_env.c
+	  	src/env.c src/builtin.c src/tools.c src/split_env.c src/cd.c src/echo.c \
+			src/tools_builtin.c
 
 OBJ = $(SRC: .c=.o)
 

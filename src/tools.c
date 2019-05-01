@@ -76,11 +76,51 @@ char *first_whitespace(char *buf)
 
 char **parse_line(char *buf)
 {
+	int i;
 	char **line;
 
+	i = -1;
 	if (buf[0] == '"')
 		line = parse_command(buf);
 	else
 		line = ft_split_whitespace(buf);
+	i = detect_echo(line);
+	if (i == 0)
+		return (ft_echo(buf));
 	return (line);
+}
+
+char *parse_arg(char *str)
+{
+	char **t;
+	char *s;
+	int  k;
+	int	 j;
+	int	 i;
+
+	if (!str)
+		return (NULL);
+	i = -1;
+	k = 0;
+	j = 0;
+	t = split_env(str);
+	while (t[++i])
+	{
+		j += ft_strlen(t[i]);
+		j += 1;
+	}
+	if (!(s = (char*)malloc(sizeof(char) * (j + 2))))
+	 	return (NULL);
+	if (str[0] == '/')
+		s[k++] = '/';
+	i = -1;
+	while (t[++i])
+	{
+		j = -1;
+		while (t[i][++j])
+			s[k++] = t[i][j];
+		s[k++] = '/';
+	}
+	s[k] = '\0';
+	return (s);
 }

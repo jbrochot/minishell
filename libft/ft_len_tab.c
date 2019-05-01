@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bultin.c                                           :+:      :+:    :+:   */
+/*   ft_strlen_tab.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/15 14:08:42 by jebrocho          #+#    #+#             */
-/*   Updated: 2019/04/15 14:09:02 by jebrocho         ###   ########.fr       */
+/*   Created: 2019/04/26 15:21:20 by jebrocho          #+#    #+#             */
+/*   Updated: 2019/04/26 15:22:21 by jebrocho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int  builtin(char *buf)
+int		ft_len_tab(char **tab)
 {
-  char **line;
+	int i;
 
-  line = parse_line(buf);
-  if (!line)
-    return (1);
-  if (ft_strcmp(line[0], "exit") == 0)
-    line[1] != NULL ? exit(ft_atoi(line[1])) : exit(0);
-  if (ft_strcmp(line[0], "cd") == 0)
-    return (ft_cd(line));
-  return (0);
+	i = 0;
+	while (tab[i])
+		i++;
+	return (i);
 }

@@ -26,5 +26,12 @@ char  **parse_line(char *buf);
 int   builtin(char *buf);
 void  new_path(char *path);
 int 	line_of_env(char *str);
+char  *parse_arg(char *str);
+void  change_env(char *str, char *selec);
+int   ft_cd(char **line);
+void  add_last(char *str);
+void  rm_last(void);
+char  **ft_echo(char *line);
+int  detect_echo(char **line);
 
 #endif

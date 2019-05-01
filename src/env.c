@@ -72,3 +72,26 @@ int 	line_of_env(char *str)
 	}
 	return (-1);
 }
+
+void  change_env(char *str, char *selec)
+{
+  int i;
+  int j;
+  int k;
+
+  k = 0;
+  i = 0;
+  j = line_of_env(selec);
+  while (g_env[j][k] != '=')
+    k++;
+  k++;
+  while (str[i])
+  {
+    g_env[j][k] = str[i];
+    k++;
+    i++;
+  }
+  if (g_env[j][k - 1] == '/' && ft_strcmp(str, "/") != 0)
+    k--;
+  g_env[j][k] = '\0';
+}
