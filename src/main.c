@@ -65,6 +65,26 @@ char *get_pwd(void)
 	return (pwd);
 }
 
+void parse_of_built(char *buf)
+{
+	int i;
+
+	i = 0;
+	while (buf[i])
+	{
+		if (buf[i] == '$')
+		{
+			if (i == 0)
+				buf = other_str(buf, i);
+			else if (buf[i - 1] == ' ' || buf[i - 1] == '\t' || buf[i - 1] == '\n')
+				buf = other_str(buf, i);
+			else
+				buf = stop_str(buf, i);
+		}
+		i++;
+	}
+}
+
 int ft_read(void)
 {
 	char *path;
@@ -79,6 +99,7 @@ int ft_read(void)
 	rm_whitespace(buf);
 	if (builtin(buf) == 1)
 		return (1);
+	parse_of_built(buf);
 	path = get_env("PATH");
 	exe = ft_split(path);
 	free(path);

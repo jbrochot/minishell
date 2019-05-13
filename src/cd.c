@@ -16,6 +16,11 @@ int check_error(char **line)
 {
   DIR *dir1;
 
+  if (ft_strcmp(line[1], "~/") == 0)
+  {
+    line[1] = get_env("HOME");
+    return (1);
+  }
   if (ft_is_dir(line[1]) == 0)
   {
     ft_putstr_fd("cd: ", 2);

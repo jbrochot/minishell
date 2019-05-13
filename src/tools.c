@@ -28,6 +28,20 @@ void rm_whitespace(char *buf)
 		j++;
 	}
 	buf[j] = '\0';
+	i = 0;
+/*	while (buf[i])
+	{
+  	if (buf[i] == '$')
+		{
+			if (i == 0)
+				buf = other_str(buf, i);
+			else if (buf[i - 1] == ' ' || buf[i - 1] == '\t' || buf[i - 1] == '\n')
+				buf = other_str(buf, i);
+			else
+				buf = stop_str(buf, i);
+		}
+		i++;
+	}*/
 }
 
 void rm_one(char *buf, int k)
