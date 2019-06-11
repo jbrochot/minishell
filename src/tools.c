@@ -12,10 +12,15 @@
 
 #include "../includes/minishell.h"
 
-void rm_whitespace(char *buf)
+void rm_whitespace(char buf[4096])
 {
+	char str_env[30];
+	char *stock_d;
+	char stock_e[4096];
 	int i;
 	int j;
+	int k;
+	int l;
 
 	i = 0;
 	j = 0;
@@ -28,20 +33,33 @@ void rm_whitespace(char *buf)
 		j++;
 	}
 	buf[j] = '\0';
-	i = 0;
-/*	while (buf[i])
+	i = -1;
+	while (buf[++i])
 	{
   	if (buf[i] == '$')
 		{
-			if (i == 0)
-				buf = other_str(buf, i);
-			else if (buf[i - 1] == ' ' || buf[i - 1] == '\t' || buf[i - 1] == '\n')
-				buf = other_str(buf, i);
-			else
-				buf = stop_str(buf, i);
+			l = 0;
+			buf[i] = '\0';
+			k = i;
+			j = 0;
+			i++;
+			while (buf[i] != ' ' && buf[i] != '\t' && buf[i] != '\n' && buf[i])
+				str_env[j++] = buf[i++];
+			while (buf[i])
+				stock_e[l++] = buf[i++];
+			str_env[j] = '\0';
+			j = 0;
+			if ((stock_d = get_env(str_env)) != NULL)
+			{
+				while (stock_d[j])
+					buf[k++] = stock_d[j++];
+				j = 0;
+				while (stock_e[j])
+					buf[k++] = stock_e[j++];
+				buf[k] = '\0';
+			}
 		}
-		i++;
-	}*/
+	}
 }
 
 void rm_one(char *buf, int k)

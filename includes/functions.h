@@ -32,8 +32,7 @@ int   ft_cd(char **line);
 void  add_last(char *str);
 void  rm_last(void);
 char  **ft_echo(char *line);
-int  detect_echo(char **line);
-char *other_str(char *str, int i);
-char *stop_str(char *str, int i);
+int   ft_setenv(char **line);
+int   detect_echo(char **line);
 
 #endif

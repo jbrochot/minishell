@@ -104,84 +104,8 @@ void parse_echo(char *line)
   rm_cote(line);
 }
 
-char *other_str(char *str, int i)
-{
-  char *tmp;
-  char *s;
-  int j;
-  int k;
-
-  k = i;
-  while (str[k] && str[k] != ' ' && str[k] != '\t' && str[k] != '\n')
-    k++;
-  if (!(s = (char*)malloc(sizeof(char) * (k - i))))
-    return (NULL);
-  j = k;
-  while (str[k])
-    k++;
-  if (!(tmp = (char*)malloc(sizeof(char) * (k - j))))
-    return (NULL);
-  k = j;
-  j = 0;
-  while (str[k])
-  {
-    tmp[j] = str[k];
-    j++;
-    k++;
-  }
-  tmp[j] = '\0';
-  j = 0;
-  k = i;
-  i++;
-  while (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' && str[i])
-  {
-    s[j] = str[i];
-    j++;
-    i++;
-  }
-  s[j] = '\0';
-  str[k] = '\0';
-  s = get_env(s);
-  if (s != NULL)
-  {
-    str = ft_strjoin(str, s);
-    str = ft_strjoin(str, tmp);
-    return (str);
-  }
-  return (NULL);
-}
-
-char *stop_str(char *str, int i)
-{
-  char *tmp;
-  int j;
-  int k;
-
-  j = i;
-  while (str[i] && str[i] != '\t' && str[i] != ' ' && str[i] != '\n')
-    i++;
-  k = i;
-  while (str[i])
-    i++;
-  if (!(tmp = (char*)malloc(sizeof(char) * (i - k))))
-    return (NULL);
-  i = k;
-  k = 0;
-  while (str[i])
-  {
-    tmp[k] = str[i];
-    k++;
-    i++;
-  }
-  tmp[k] = '\0';
-  str[j] = '\0';
-  str = ft_strjoin(str, tmp);
-  return (str);
-}
-
 char *first_parse(char *str)
 {
-
   int i;
   int id_cote;
 
@@ -189,15 +113,6 @@ char *first_parse(char *str)
   i = -1;
   while (str[++i])
   {
-    if (str[i] == '$')
-    {
-      if (i == 0)
-        str = other_str(str, i);
-      else if (str[i - 1] == ' ' || str[i - 1] == '\t')
-        str = other_str(str, i);
-      else
-        str = stop_str(str, i);
-    }
     if (str[i] == '"')
       id_cote++;
     if (id_cote % 2 == 0)

@@ -92,6 +92,8 @@ void  new_path(char *path)
 int   ft_cd(char **line)
 {
   line[1] = parse_arg(line[1]);
+  if (ft_strcmp(line[1], "./") == 0)
+    return (1);
   if (line[1])
   {
     if (check_error(line) == -1)
