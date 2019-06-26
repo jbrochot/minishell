@@ -78,7 +78,7 @@ int 	line_of_env(char *str)
 	return (-1);
 }
 
-void  change_env(char *str, char *selec)
+void  change_env(char *str, char *selec, t_env *v)
 {
   int i;
   int j;
@@ -99,4 +99,10 @@ void  change_env(char *str, char *selec)
   if (g_env[j][k - 1] == '/' && ft_strcmp(str, "/") != 0)
     k--;
   g_env[j][k] = '\0';
+	if (ft_strcmp(selec, "PWD") == 0)
+		v->pwd = ft_strdup(g_env[line_of_env("PWD")]);
+	if (ft_strcmp(selec, "HOME") == 0)
+		v->home = ft_strdup(g_env[line_of_env("HOME")]);
+	if (ft_strcmp(selec, "PATH") == 0)
+		v->path = ft_strdup(g_env[line_of_env("PATH")]);
 }

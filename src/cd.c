@@ -70,9 +70,8 @@ int  new_path(char *path, t_env *v)
   if (path[0] == '-')
   {
     v->pwd = ft_strdup(g_env[line_of_env("OLDPWD")]);
-    ft_printf("%s\n\n", v->pwd);
-    change_env(get_env("PWD"), "OLDPWD");
-    change_env(get_env_val(v->pwd), "PWD");
+    change_env(get_env("PWD"), "OLDPWD", v);
+    change_env(get_env_val(v->pwd), "PWD", v);
     v->pwd = ft_strdup(g_env[line_of_env("PWD")]);
     return (1);
   }

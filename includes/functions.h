@@ -27,7 +27,7 @@ char  **parse_line(char *buf);
 int   builtin(char *buf, t_env *v);
 int 	line_of_env(char *str);
 void  parse_arg(char *str, char c);
-void  change_env(char *str, char *selec);
+void  change_env(char *str, char *selec, t_env *v);
 int   ft_cd(char **line, t_env *v);
 void  add_last(char *str, t_env *v);
 void  rm_last(t_env *v);

@@ -48,7 +48,10 @@ int exec_all(char **exe, char *buf, t_env *v)
 	{
 		path = ft_strdup(line[0]);
 		if (execve(path, line, g_env) == -1)
+		{
+			exit(1);
 			return (ft_error_path());
+		}
 	}
 	if (pid == 0)
 	{

@@ -61,7 +61,7 @@ int ft_setenv(char **line, t_env *v)
         ft_unsetenv(res);
         ft_setenv(line, v);
       }
-      change_env(nline[1], nline[0]);
+      change_env(nline[1], nline[0], v);
     }
     else
     {
