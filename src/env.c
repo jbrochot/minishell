@@ -13,7 +13,7 @@
 #include "../includes/minishell.h"
 
 
-static char   *get_env_val(char *str)
+char   *get_env_val(char *str)
 {
 	char *s;
 	int i;
@@ -39,7 +39,7 @@ static char   *get_env_val(char *str)
 	return (s);
 }
 
-char            *get_env(char *str)
+char   *get_env(char *str)
 {
 	char *s;
 	int i;
@@ -50,9 +50,14 @@ char            *get_env(char *str)
 	{
 		s = ft_strstr(g_env[i], str);
 		if (s != NULL)
-			return (s = get_env_val(s));
+		{
+			free(str);
+			return (get_env_val(s));
+		}
 		i++;
 	}
+
+	free(str);
 	return (NULL);
 }
 

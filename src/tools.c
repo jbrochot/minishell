@@ -12,15 +12,91 @@
 
 #include "../includes/minishell.h"
 
-void rm_whitespace(char buf[4096])
+char	*get_exp(char *stock, int index)
 {
-	char str_env[30];
-	char *stock_d;
-	char stock_e[4096];
+	int		i;
+	char	*exp;
+
+	i = 0;
+	while (stock[index + i])
+		i++;
+	if (i == index + 1)
+		return ("$");
+	if (!(exp = (char*)malloc(sizeof(char) * (i + 1))))
+		return (NULL);
+	i = 0;
+	index++;
+	while (stock[index])
+	{
+		exp[i] = stock[index];
+		i++;
+		index++;
+	}
+	exp[i] = '\0';
+	return (get_env(exp));
+}
+
+char	*parse_exp(char *stock, char *exp)
+{
+	int i;
+
+	i = 0;
+	while (stock[i] != '$' && stock[i])
+		i++;
+	stock[i] = '\0';
+	return (ft_strjoin(stock, exp));
+}
+
+char	*expansions(char *buf)
+{
+	char **stock;
+	char *exp;
+	char save[255];
 	int i;
 	int j;
 	int k;
-	int l;
+
+	i = -1;
+	stock = ft_split_whitespace_exp(buf);
+	while (stock[++i])
+	{
+		j = -1;
+		k = 0;
+		while (stock[i][++j])
+		{
+			if (stock[i][j] == '$')
+			{
+				exp = get_exp(stock[i], j);
+				if (exp != NULL)
+						stock[i] = parse_exp(stock[i], exp);
+				else
+					stock[i][j] = '\0';
+			}
+		  if (stock[i][j] == '~' && (stock[i][j + 1] == '/' || j == 0))
+			{
+				while (stock[i][++j])
+					save[k++] = stock[i][j];
+				save[k] = 0;
+				stock[i] = get_env("HOME");
+				stock[i] = ft_strjoin(stock[i], save);
+			}
+		}
+	 }
+	i = 0;
+	buf = stock[0];
+	while (stock[++i])
+	{
+		buf = ft_strjoin(buf, " ");
+		buf = ft_strjoin(buf, stock[i]);
+	}
+	buf = ft_strjoin(buf, "\n");
+	return (buf);
+}
+
+char *rm_whitespace(char *buf)
+{
+	int i;
+	int j;
 
 	i = 0;
 	j = 0;
@@ -33,33 +109,9 @@ void rm_whitespace(char buf[4096])
 		j++;
 	}
 	buf[j] = '\0';
-	i = -1;
-	while (buf[++i])
-	{
-  	if (buf[i] == '$')
-		{
-			l = 0;
-			buf[i] = '\0';
-			k = i;
-			j = 0;
-			i++;
-			while (buf[i] != ' ' && buf[i] != '\t' && buf[i] != '\n' && buf[i])
-				str_env[j++] = buf[i++];
-			while (buf[i])
-				stock_e[l++] = buf[i++];
-			str_env[j] = '\0';
-			j = 0;
-			if ((stock_d = get_env(str_env)) != NULL)
-			{
-				while (stock_d[j])
-					buf[k++] = stock_d[j++];
-				j = 0;
-				while (stock_e[j])
-					buf[k++] = stock_e[j++];
-				buf[k] = '\0';
-			}
-		}
-	}
+	if (ft_strlen(buf) > 1)
+		buf = expansions(buf);
+	return (buf);
 }
 
 void rm_one(char *buf, int k)
@@ -122,37 +174,76 @@ char **parse_line(char *buf)
 	return (line);
 }
 
-char *parse_arg(char *str)
+void parse_arg(char *str, char c)
 {
-	char **t;
-	char *s;
-	int  k;
 	int	 j;
 	int	 i;
 
-	if (!str)
-		return (NULL);
 	i = -1;
-	k = 0;
 	j = 0;
-	t = split_env(str);
-	while (t[++i])
+	if (!str)
+		return ;
+	while (str[++i])
 	{
-		j += ft_strlen(t[i]);
-		j += 1;
+		if ((str[i] == c && str[i + 1] != c) || str[i] != c)
+		{
+			str[j] = str[i];
+			j++;
+		}
 	}
-	if (!(s = (char*)malloc(sizeof(char) * (j + 2))))
-	 	return (NULL);
-	if (str[0] == '/')
-		s[k++] = '/';
+	str[j] = 0;
+}
+
+char *parse_error(char *s)
+{
+	char **cpy;
+	int i;
+	int j;
+	int save;
+
 	i = -1;
-	while (t[++i])
+	cpy = ft_strsplit(s, '/');
+	if (s[0] == '/')
 	{
-		j = -1;
-		while (t[i][++j])
-			s[k++] = t[i][j];
-		s[k++] = '/';
+		while (s[++i]);
+
+		if (i == 1)
+			return (ft_strdup("/"));
+		save = 1;
 	}
-	s[k] = '\0';
+	while (cpy[++i])
+	{
+		if (ft_strcmp(cpy[i], "..") == 0 && i > 0)
+		{
+			j = i;
+			while (cpy[j + 1])
+			{
+				cpy[j - 1] = cpy[j + 1];
+				j++;
+			}
+			cpy[j - 1] = 0;
+			if (j > i)
+				i--;
+		}
+	}
+	i = 0;
+	if (save == 1)
+		cpy[0] = ft_strjoin("/", cpy[0]);
+	while (cpy[++i])
+	{
+		cpy[0] = ft_strjoin(cpy[0], "/");
+		cpy[0] = ft_strjoin(cpy[0], cpy[i]);
+	}
 	return (s);
+}
+
+int	ft_reset(t_env *v)
+{
+	if (line_of_env("PWD") > -1)
+		g_env[line_of_env("PWD")] = ft_strdup(v->pwd);
+	if (line_of_env("HOME") > -1)
+		g_env[line_of_env("HOME")] = ft_strdup(v->home);
+	if (line_of_env("PATH") > -1)
+		g_env[line_of_env("PATH")] = ft_strdup(v->path);
+	return (1);
 }

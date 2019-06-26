@@ -16,13 +16,15 @@
 # include <unistd.h>
 # include <sys/wait.h>
 # include <dirent.h>
-# include "../libft/libft.h"
 # include <functions.h>
 # include <termios.h>
 # include <term.h>
 # include <sys/types.h>
 # include <curses.h>
+# include <signal.h>
 # include "functions.h"
+# include "struct.h"
+# include "../libft/libft.h"
 
 char **g_env;
 

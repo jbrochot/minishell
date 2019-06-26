@@ -6,15 +6,16 @@
 #    By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/21 11:32:21 by jebrocho          #+#    #+#              #
-#    Updated: 2019/04/09 18:01:43 by jebrocho         ###   ########.fr        #
+#    Updated: 2019/06/21 13:36:35 by jebrocho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
 SRC = src/main.c src/ft_split.c src/ft_split_whitespace.c src/error.c \
-	  	src/env.c src/builtin.c src/tools.c src/split_env.c src/cd.c src/echo.c \
-			src/tools_builtin.c src/setenv.c
+	  	src/env.c src/builtin.c src/tools.c src/cd.c src/echo.c \
+			src/tools_builtin.c src/ft_split_whitespace_exp.c src/setenv.c \
+			src/unsetenv.c
 
 OBJ = $(SRC: .c=.o)
 
@@ -44,7 +45,7 @@ clean:
 	@echo "OK."
 
 fclean:
-	@echo "Deleting ./ft_ls"
+	@echo "Deleting ./minishell"
 	@make -C libft/ fclean
 	@rm -rf $(NAME)
 	@echo "OK."

@@ -14,14 +14,11 @@
 
 int check_error(char **line)
 {
-  DIR *dir1;
+  DIR  *dir1;
+  char *cpy;
 
-  if (ft_strcmp(line[1], "~/") == 0)
-  {
-    line[1] = get_env("HOME");
-    return (1);
-  }
-  if (ft_is_dir(line[1]) == 0)
+  cpy = parse_error(line[1]);
+  if (ft_is_dir(cpy) == 0)
   {
     ft_putstr_fd("cd: ", 2);
     ft_putstr_fd("no such file or directory: ", 2);
@@ -29,7 +26,7 @@ int check_error(char **line)
     ft_putstr_fd("\n", 2);
     return (-1);
   }
-  dir1 = opendir(line[1]);
+  dir1 = opendir(cpy);
   if (dir1 == NULL)
   {
     ft_putstr_fd("cd: ", 2);
@@ -41,67 +38,75 @@ int check_error(char **line)
   return (0);
 }
 
-void home(void)
+void home(char **line, t_env *v)
 {
-  int i;
-  int j;
   int k;
   int l;
 
   l = 0;
   k = 0;
-  i = line_of_env("HOME");
-  j = line_of_env("PWD");
-  while (g_env[j][k] != '=')
+  ft_setenv(line, v);
+  while (v->pwd[k] != '=')
     k++;
-  while (g_env[i][l] != '=')
+  while (v->home[l] != '=')
     l++;
-  while (g_env[i][l])
+  while (v->home[l])
   {
-    g_env[j][k] = g_env[i][l];
+    v->pwd[k] = v->home[l];
     k++;
     l++;
   }
-  g_env[j][k] = '\0';
+  v->pwd[k] = '\0';
 }
 
-void  new_path(char *path)
+int  new_path(char *path, t_env *v)
 {
   int   i;
   char  **s;
 
-  i = 0;
-  if (path[i] == '/')
+  i = -1;
+  if (path[0] == '/')
+    v->pwd = ft_strdup("PWD=/");
+  if (path[0] == '-')
   {
-    change_env(path, "PWD");
-    return ;
+    v->pwd = ft_strdup(g_env[line_of_env("OLDPWD")]);
+    ft_printf("%s\n\n", v->pwd);
+    change_env(get_env("PWD"), "OLDPWD");
+    change_env(get_env_val(v->pwd), "PWD");
+    v->pwd = ft_strdup(g_env[line_of_env("PWD")]);
+    return (1);
   }
-  s = split_env(path);
-  while (s[i])
+  s = ft_split(path, '/');
+  while (s[++i])
   {
     if (ft_strcmp(s[i], "..") == 0)
-      rm_last();
+      rm_last(v);
     else if (s[i])
-      add_last(s[i]);
+      add_last(s[i], v);
     free(s[i]);
-    i++;
   }
   free(s);
+  return (0);
 }
 
-int   ft_cd(char **line)
+int   ft_cd(char **line, t_env *v)
 {
-  line[1] = parse_arg(line[1]);
-  if (ft_strcmp(line[1], "./") == 0)
-    return (1);
+  char *l[3];
+
+  parse_arg(line[1], '/');
+  l[1] = ft_strjoin("OLDPWD=", get_env_val(v->pwd));
+  l[0] = 0;
+  l[2] = 0;
   if (line[1])
   {
     if (check_error(line) == -1)
       return (1);
-    new_path(line[1]);
+    if (new_path(line[1], v) == 0)
+      ft_setenv(l, v);
+    parse_arg(v->pwd, '/');
   }
   else
-    home();
-  line[1] != NULL ? chdir(get_env("PWD")) : chdir(get_env("HOME"));
+    home(l, v);
+  line[1] != NULL ? chdir(get_env_val(v->pwd)) : chdir(get_env_val(v->home));
   return (1);
 }

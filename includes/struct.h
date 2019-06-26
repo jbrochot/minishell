@@ -13,4 +13,12 @@
 #ifndef STRUCT_H
 # define STRUCT_H
 
+typedef struct s_env
+{
+  char  *home;
+  char  *pwd;
+  char  *path;
+  int   nopath;
+}              t_env;
+
 #endif

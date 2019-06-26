@@ -12,6 +12,15 @@
 
 #include "../includes/minishell.h"
 
+void ctrl(int signal)
+{
+  (void)signal;
+  char *path;
+
+  write(0, "\n", 1);
+  path = get_pwd();
+  ft_printf("[%s]-> ", path);
+}
 
 void print_error(char *buf)
 {
@@ -21,4 +30,16 @@ void print_error(char *buf)
   i--;
   buf[i] = '\0';
   ft_printf("%s: Commande introuvable\n", buf);
+}
+
+int   error_env(void)
+{
+  ft_putstr_fd("environment not found\n", 2);
+  return (-1);
+}
+
+int   ft_error_path(void)
+{
+  ft_putstr_fd("PATH not found\n", 2);
+  return (-1);
 }

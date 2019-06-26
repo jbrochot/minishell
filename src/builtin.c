@@ -12,7 +12,7 @@
 
 #include "../includes/minishell.h"
 
-int  builtin(char *buf)
+int  builtin(char *buf, t_env *v)
 {
   char **line;
 
@@ -22,8 +22,12 @@ int  builtin(char *buf)
   if (ft_strcmp(line[0], "exit") == 0)
     line[1] != NULL ? exit(ft_atoi(line[1])) : exit(0);
   if (ft_strcmp(line[0], "cd") == 0)
-    return (ft_cd(line));
+    return (ft_cd(line, v));
   if (ft_strcmp(line[0], "setenv") == 0)
-    return (ft_setenv(line));
+    return (ft_setenv(line, v));
+  if (ft_strcmp(line[0], "env") == 0)
+    return (p_env());
+  if (ft_strcmp(line[0], "unsetenv") == 0)
+    return (ft_unsetenv(line));
   return (0);
 }

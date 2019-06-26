@@ -24,7 +24,7 @@ char **parse_command(char *buf)
 	return (line);
 }
 
-int exec_all(char **exe, char *buf)
+int exec_all(char **exe, char *buf, t_env *v)
 {
 	pid_t	pid;
 	char	**line;
@@ -32,14 +32,23 @@ int exec_all(char **exe, char *buf)
 	int		i;
 
 	i = -1;
-	line = parse_line(ft_strdup(buf));
+	line = parse_line(buf);
 	pid = fork();
-	while(exe[++i])
+	if (v->nopath != 1)
 	{
-		path = ft_strjoin(exe[i], "/");
-		path = ft_strjoin(path, line[0]);
-		if (pid == 0)
-			execve(path, line, g_env);
+		while(exe[++i])
+		{
+			path = ft_strjoin(exe[i], "/");
+			path = ft_strjoin(path, line[0]);
+			if (pid == 0)
+				execve(path, line, g_env);
+		}
+	}
+	if (pid == 0)
+	{
+		path = ft_strdup(line[0]);
+		if (execve(path, line, g_env) == -1)
+			return (ft_error_path());
 	}
 	if (pid == 0)
 	{
@@ -54,9 +63,10 @@ int exec_all(char **exe, char *buf)
 
 char *get_pwd(void)
 {
+	char cwd[256];
 	char *pwd;
 
-	pwd = get_env("PWD");
+	pwd = getcwd(cwd, sizeof(cwd));
 	if (ft_strcmp(pwd, "/") != 0)
 	{
 		pwd = ft_strrchr(pwd, '/');
@@ -65,8 +75,9 @@ char *get_pwd(void)
 	return (pwd);
 }
 
-int ft_read(void)
+int ft_read(t_env *v)
 {
+	char *stock;
 	char *path;
 	char **exe;
 	char buf[4096];
@@ -76,23 +87,32 @@ int ft_read(void)
 	ft_bzero(buf, 4096);
 	if (read(0, &buf, 4096) == -1)
 		return (-1);
-	rm_whitespace(buf);
-	if (builtin(buf) == 1)
-		return (1);
-	path = get_env("PATH");
-	exe = ft_split(path);
+	stock = rm_whitespace(buf);
+	if (builtin(stock, v) == 1)
+		return (ft_reset(v));
+	path = get_env_val(v->path);
+	exe = ft_split(path, ':');
 	free(path);
-	exec_all(exe, buf);
-	return (1);
+	if (line_of_env("PATH") == -1)
+		v->nopath = 1;
+	exec_all(exe, stock, v);
+	return (ft_reset(v));
 }
 
 int		main(int ac, char **av, char **env)
 {
+	t_env v;
+
 	(void)av;
 	(void)ac;
-
+	if (!env[0])
+		return (error_env());
 	g_env = env;
-	while (ft_read() == 1)
+	v.pwd = ft_strdup(g_env[line_of_env("PWD")]);
+	v.home = ft_strdup(g_env[line_of_env("HOME")]);
+	v.path = ft_strdup(g_env[line_of_env("PATH")]);
+	signal(2, ctrl);
+	while (ft_read(&v) == 1)
 	{
 	}
 	return (0);

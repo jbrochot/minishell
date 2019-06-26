@@ -15,8 +15,10 @@
 int		ft_is_dir(char *s)
 {
 	if (lstat(s, &st) < 0)
-		return (0);
+		return (-1);
 	if (S_ISDIR(st.st_mode))
+		return (-1);
+	if (S_ISLNK(st.st_mode))
 		return (1);
 	return (0);
 }

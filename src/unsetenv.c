@@ -1,36 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools_builtin.c                                    :+:      :+:    :+:   */
+/*   unsetenv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/23 13:26:21 by jebrocho          #+#    #+#             */
-/*   Updated: 2019/04/23 13:26:24 by jebrocho         ###   ########.fr       */
+/*   Created: 2019/06/12 10:14:21 by jebrocho          #+#    #+#             */
+/*   Updated: 2019/06/12 10:14:37 by jebrocho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void rm_last(t_env *v)
+int   ft_unsetenv(char **line)
 {
-    int  j;
+  int i;
+  int j;
 
-    j = 0;
-    while (v->pwd[j])
+  i = 0;
+  while (line[++i])
+  {
+    j = line_of_env(line[i]);
+    if (j == -1)
+    {
+      ft_putstr_fd("can not unset environment\n", 2);
+      return (1);
+    }
+    while (g_env[j + 1])
+    {
+      g_env[j] = g_env[j + 1];
       j++;
-    if (j == 4)
-      return ;
-    while (v->pwd[j] != '/')
-      j--;
-    if (j > 4)
-      v->pwd[j] = '\0';
-    else
-      v->pwd[++j] = '\0';
-}
-
-void add_last(char *str, t_env *v)
-{
-  v->pwd = ft_strjoin(v->pwd, "/");
-  v->pwd = ft_strjoin(v->pwd, str);
+    }
+    g_env[j] = NULL;
+    j = 0;
+  }
+  return (1);
 }

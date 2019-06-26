@@ -13,26 +13,37 @@
 #ifndef FUNCTIONS_H
 # define FUNCTIONS_H
 
-char	**ft_split(char *str);
+# include "struct.h"
+
+char	**ft_split(char *str, char c);
 char	**ft_split_whitespace(char *str);
-char	**split_env(char *str);
 void  print_error(char *buf);
 char  *get_env(char *str);
 char  *first_whitespace(char *buf);
 void  rm_one(char *buf, int k);
-void  rm_whitespace(char *buf);
+char  *rm_whitespace(char *buf);
 char  **parse_command(char *buf);
 char  **parse_line(char *buf);
-int   builtin(char *buf);
-void  new_path(char *path);
+int   builtin(char *buf, t_env *v);
 int 	line_of_env(char *str);
-char  *parse_arg(char *str);
+void  parse_arg(char *str, char c);
 void  change_env(char *str, char *selec);
-int   ft_cd(char **line);
-void  add_last(char *str);
-void  rm_last(void);
+int   ft_cd(char **line, t_env *v);
+void  add_last(char *str, t_env *v);
+void  rm_last(t_env *v);
 char  **ft_echo(char *line);
-int   ft_setenv(char **line);
+char	**ft_split_whitespace_exp(char *str);
 int   detect_echo(char **line);
+int   ft_setenv(char **line, t_env *v);
+int   p_env(void);
+int   ft_unsetenv(char **line);
+void  ctrl(int signal);
+char  *get_pwd(void);
+char  *parse_error(char *s);
+void  new_env(char *l);
+int   error_env(void);
+int	  ft_reset(t_env *v);
+char  *get_env_val(char *str);
+int   ft_error_path(void);
 
 #endif

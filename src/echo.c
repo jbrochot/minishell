@@ -75,15 +75,15 @@ void parse_echo(char *line)
 {
   int i;
   int id_cote;
-  int new_id;
   int index;
+  int new_id;
 
   id_cote = 0;
   i = -1;
   while (line[++i])
   {
     if (line[i] == '"')
-      id_cote += 1;
+      id_cote++;
     if (id_cote % 2 == 0)
     {
       while (line[i] && line[i] != ' ' && line[i] != '\t')
@@ -95,8 +95,8 @@ void parse_echo(char *line)
       while (line[new_id])
       {
         line[index] = line[new_id];
-        index += 1;
-        new_id += 1;
+        index++;
+        new_id++;
       }
       line[index] = '\0';
     }
@@ -104,30 +104,9 @@ void parse_echo(char *line)
   rm_cote(line);
 }
 
-char *first_parse(char *str)
-{
-  int i;
-  int id_cote;
-
-  id_cote = 0;
-  i = -1;
-  while (str[++i])
-  {
-    if (str[i] == '"')
-      id_cote++;
-    if (id_cote % 2 == 0)
-    {
-      if (str[i] == '\t')
-        str[i] = ' ';
-    }
-  }
-  return (str);
-}
-
 char **ft_echo(char *str)
 {
   rm_echo(str);
-  str = first_parse(str);
   parse_echo(str);
   ft_printf("%s", str);
   return (NULL);
