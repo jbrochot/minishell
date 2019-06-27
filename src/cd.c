@@ -12,29 +12,19 @@
 
 #include "../includes/minishell.h"
 
-int check_error(char **line)
+int check_error(char **line, t_env *v)
 {
   DIR  *dir1;
   char *cpy;
 
   cpy = parse_error(line[1]);
-  if (ft_is_dir(cpy) == 0)
-  {
-    ft_putstr_fd("cd: ", 2);
-    ft_putstr_fd("no such file or directory: ", 2);
-    ft_putstr_fd(line[1], 2);
-    ft_putstr_fd("\n", 2);
-    return (-1);
-  }
-  dir1 = opendir(cpy);
-  if (dir1 == NULL)
-  {
-    ft_putstr_fd("cd: ", 2);
-    ft_putstr_fd("permission denied: ", 2);
-    ft_putstr_fd(line[1], 2);
-    ft_putstr_fd("\n", 2);
-    return (-1);
-  }
+  if (lstat(cpy, &st) < 0 && v->istir != 1)
+    return (error_cd(cpy, 0));
+  if (ft_is_dir(cpy) == 0 && v->istir != 1)
+    return (error_cd(cpy, 2));
+  dir1  = opendir(cpy);
+  if (dir1 == NULL && v->istir != 1)
+    return (error_cd(cpy, 1));
   return (0);
 }
 
@@ -69,10 +59,11 @@ int  new_path(char *path, t_env *v)
     v->pwd = ft_strdup("PWD=/");
   if (path[0] == '-')
   {
+    free(v->pwd);
     v->pwd = ft_strdup(g_env[line_of_env("OLDPWD")]);
     change_env(get_env("PWD"), "OLDPWD", v);
     change_env(get_env_val(v->pwd), "PWD", v);
-    v->pwd = ft_strdup(g_env[line_of_env("PWD")]);
+    v->istir = 0;
     return (1);
   }
   s = ft_split(path, '/');
@@ -92,17 +83,17 @@ int   ft_cd(char **line, t_env *v)
 {
   char *l[3];
 
-  parse_arg(line[1], '/');
+  parse_arg(line[1], '/', v);
   l[1] = ft_strjoin("OLDPWD=", get_env_val(v->pwd));
   l[0] = 0;
   l[2] = 0;
   if (line[1])
   {
-    if (check_error(line) == -1)
+    if (check_error(line, v) == -1)
       return (1);
     if (new_path(line[1], v) == 0)
       ft_setenv(l, v);
-    parse_arg(v->pwd, '/');
+//    parse_arg(v->pwd, '/');
   }
   else
     home(l, v);

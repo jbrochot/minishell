@@ -52,7 +52,7 @@ int ft_setenv(char **line, t_env *v)
   while (line[++i])
   {
     nline = ft_split(line[i], '=');
-    if (get_env(nline[0]) != NULL)
+    if (get_env(nline[0]) != NULL && nline[1])
     {
       if (ft_strcmp(nline[0], "OLDPWD") == 0)
       {

@@ -157,7 +157,6 @@ char *first_whitespace(char *buf)
 	return (tmp);
 }
 
-
 char **parse_line(char *buf)
 {
 	int i;
@@ -174,7 +173,7 @@ char **parse_line(char *buf)
 	return (line);
 }
 
-void parse_arg(char *str, char c)
+void parse_arg(char *str, char c, t_env *v)
 {
 	int	 j;
 	int	 i;
@@ -192,6 +191,8 @@ void parse_arg(char *str, char c)
 		}
 	}
 	str[j] = 0;
+	if (str[j - 1] == '-' && !str[j - 2])
+		v->istir = 1;
 }
 
 char *parse_error(char *s)
@@ -202,6 +203,7 @@ char *parse_error(char *s)
 	int save;
 
 	i = -1;
+	save = 0;
 	cpy = ft_strsplit(s, '/');
 	if (s[0] == '/')
 	{
@@ -234,7 +236,7 @@ char *parse_error(char *s)
 		cpy[0] = ft_strjoin(cpy[0], "/");
 		cpy[0] = ft_strjoin(cpy[0], cpy[i]);
 	}
-	return (s);
+	return (cpy[0]);
 }
 
 int	ft_reset(t_env *v)

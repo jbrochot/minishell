@@ -19,6 +19,7 @@ typedef struct s_env
   char  *pwd;
   char  *path;
   int   nopath;
+  int   istir;
 }              t_env;
 
 #endif

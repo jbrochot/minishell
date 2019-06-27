@@ -38,8 +38,33 @@ int   error_env(void)
   return (-1);
 }
 
-int   ft_error_path(void)
+void   error_path(void)
 {
   ft_putstr_fd("PATH not found\n", 2);
+  exit(1);
+}
+
+
+int   error_cd(char *str, int mod)
+{
+  if (mod == 0)
+  {
+    ft_putstr_fd("cd: no such file or directory: ", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd("\n", 2);
+  }
+  else if (mod == 1)
+  {
+    ft_putstr_fd("cd: permission denied: ", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd("\n", 2);
+  }
+  else if (mod == 2)
+  {
+    ft_putstr_fd("cd: not a directory: ", 2);
+    ft_putstr_fd(str, 2);
+    ft_putstr_fd("\n", 2);
+  }
+  free(str);
   return (-1);
 }

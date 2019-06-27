@@ -26,7 +26,7 @@ char  **parse_command(char *buf);
 char  **parse_line(char *buf);
 int   builtin(char *buf, t_env *v);
 int 	line_of_env(char *str);
-void  parse_arg(char *str, char c);
+void  parse_arg(char *str, char c, t_env *v);
 void  change_env(char *str, char *selec, t_env *v);
 int   ft_cd(char **line, t_env *v);
 void  add_last(char *str, t_env *v);
@@ -44,6 +44,7 @@ void  new_env(char *l);
 int   error_env(void);
 int	  ft_reset(t_env *v);
 char  *get_env_val(char *str);
-int   ft_error_path(void);
+void  error_path(void);
+int   error_cd(char *str, int mod);
 
 #endif

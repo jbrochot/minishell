@@ -46,19 +46,17 @@ int exec_all(char **exe, char *buf, t_env *v)
 	}
 	if (pid == 0)
 	{
-		path = ft_strdup(line[0]);
-		if (execve(path, line, g_env) == -1)
-		{
-			exit(1);
-			return (ft_error_path());
-		}
-	}
-	if (pid == 0)
-	{
 		if (buf[0] != '\n')
 			print_error(buf);
 		exit(1);
 	}
+	if (pid == 0)
+	{
+		path = ft_strdup(line[0]);
+		if (execve(path, line, g_env) == -1)
+			error_path();
+	}
+
 	if (pid > 0)
 		wait(NULL);
 	return (1);
@@ -70,6 +68,8 @@ char *get_pwd(void)
 	char *pwd;
 
 	pwd = getcwd(cwd, sizeof(cwd));
+	if (!pwd)
+		return (".");
 	if (ft_strcmp(pwd, "/") != 0)
 	{
 		pwd = ft_strrchr(pwd, '/');
