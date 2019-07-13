@@ -16,12 +16,15 @@ char	*get_exp(char *stock, int index)
 {
 	int		i;
 	char	*exp;
+	char 	*s;
 
 	i = 0;
 	while (stock[index + i])
 		i++;
 	if (i == index + 1)
+	{
 		return ("$");
+	}
 	if (!(exp = (char*)malloc(sizeof(char) * (i + 1))))
 		return (NULL);
 	i = 0;
@@ -33,7 +36,10 @@ char	*get_exp(char *stock, int index)
 		index++;
 	}
 	exp[i] = '\0';
-	return (get_env(exp));
+	s = get_env(exp);
+	free(exp);
+	free(stock);
+	return (s);
 }
 
 char	*parse_exp(char *stock, char *exp)
@@ -71,25 +77,29 @@ char	*expansions(char *buf)
 						stock[i] = parse_exp(stock[i], exp);
 				else
 					stock[i][j] = '\0';
+				free(exp);
 			}
 		  if (stock[i][j] == '~' && (stock[i][j + 1] == '/' || j == 0))
 			{
 				while (stock[i][++j])
 					save[k++] = stock[i][j];
 				save[k] = 0;
+				free(stock[i]);
 				stock[i] = get_env("HOME");
-				stock[i] = ft_strjoin(stock[i], save);
+				stock[i] = ft_strjoin_free(stock[i], save, 0);
 			}
 		}
-	 }
+	}
 	i = 0;
 	buf = stock[0];
 	while (stock[++i])
 	{
-		buf = ft_strjoin(buf, " ");
-		buf = ft_strjoin(buf, stock[i]);
+		buf = ft_strjoin_free(buf, " ", 0);
+		buf = ft_strjoin_free(buf, stock[i], 0);
+		free(stock[i]);
 	}
-	buf = ft_strjoin(buf, "\n");
+	free(stock);
+	buf = ft_strjoin_free(buf, "\n", 0);
 	return (buf);
 }
 
@@ -191,7 +201,7 @@ void parse_arg(char *str, char c, t_env *v)
 		}
 	}
 	str[j] = 0;
-	if (str[j - 1] == '-' && !str[j - 2])
+	if (str[j - 1] == '-' && ft_strlen(str) == 1)
 		v->istir = 1;
 }
 
@@ -210,9 +220,13 @@ char *parse_error(char *s)
 		while (s[++i]);
 
 		if (i == 1)
+		{
+			free(cpy);
 			return (ft_strdup("/"));
+		}
 		save = 1;
 	}
+	i = -1;
 	while (cpy[++i])
 	{
 		if (ft_strcmp(cpy[i], "..") == 0 && i > 0)
@@ -230,22 +244,14 @@ char *parse_error(char *s)
 	}
 	i = 0;
 	if (save == 1)
-		cpy[0] = ft_strjoin("/", cpy[0]);
+		cpy[0] = ft_strjoin_free("/", cpy[0], 1);
 	while (cpy[++i])
 	{
-		cpy[0] = ft_strjoin(cpy[0], "/");
-		cpy[0] = ft_strjoin(cpy[0], cpy[i]);
+		cpy[0] = ft_strjoin_free(cpy[0], "/", 0);
+		cpy[0] = ft_strjoin_free(cpy[0], cpy[i], 2);
 	}
-	return (cpy[0]);
-}
-
-int	ft_reset(t_env *v)
-{
-	if (line_of_env("PWD") > -1)
-		g_env[line_of_env("PWD")] = ft_strdup(v->pwd);
-	if (line_of_env("HOME") > -1)
-		g_env[line_of_env("HOME")] = ft_strdup(v->home);
-	if (line_of_env("PATH") > -1)
-		g_env[line_of_env("PATH")] = ft_strdup(v->path);
-	return (1);
+	s = ft_strdup(cpy[0]);
+	free(cpy[0]);
+	free(cpy);
+	return (s);
 }

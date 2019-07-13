@@ -38,9 +38,12 @@ int   error_env(void)
   return (-1);
 }
 
-void   error_path(void)
+void   error_path(int mod, char *line)
 {
-  ft_putstr_fd("PATH not found\n", 2);
+  if (mod == 0)
+    ft_putstr_fd("PATH not found\n", 2);
+  else if (mod == 1)
+    ft_printf("%s: permission denied\n", line);
   exit(1);
 }
 

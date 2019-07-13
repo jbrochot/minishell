@@ -56,7 +56,6 @@ char   *get_env(char *str)
 		}
 		i++;
 	}
-
 	free(str);
 	return (NULL);
 }
@@ -66,15 +65,19 @@ int 	line_of_env(char *str)
 	char *s;
 	int i;
 
-	str = ft_strjoin (str, "=");
+	str = ft_strjoin(str, "=");
 	i = 0;
 	while (g_env[i])
 	{
 		s = ft_strstr(g_env[i], str);
 		if (s != NULL)
+		{
+			free(str);
 			return (i);
+		}
 		i++;
 	}
+	free(str);
 	return (-1);
 }
 
@@ -90,6 +93,8 @@ void  change_env(char *str, char *selec, t_env *v)
   while (g_env[j][k] != '=')
     k++;
   k++;
+//	free(g_env[j])
+//	g_env[j] = ft_strdup(str[i]);
   while (str[i])
   {
     g_env[j][k] = str[i];
@@ -100,9 +105,18 @@ void  change_env(char *str, char *selec, t_env *v)
     k--;
   g_env[j][k] = '\0';
 	if (ft_strcmp(selec, "PWD") == 0)
+	{
+		free(v->pwd);
 		v->pwd = ft_strdup(g_env[line_of_env("PWD")]);
+	}
 	if (ft_strcmp(selec, "HOME") == 0)
+	{
+		free(v->home);
 		v->home = ft_strdup(g_env[line_of_env("HOME")]);
+	}
 	if (ft_strcmp(selec, "PATH") == 0)
+	{
+		free(v->path);
 		v->path = ft_strdup(g_env[line_of_env("PATH")]);
+	}
 }

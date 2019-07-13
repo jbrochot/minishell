@@ -20,6 +20,7 @@ typedef struct s_env
   char  *path;
   int   nopath;
   int   istir;
+  int   freethis;
 }              t_env;
 
 #endif

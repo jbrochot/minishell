@@ -46,17 +46,21 @@ int exec_all(char **exe, char *buf, t_env *v)
 	}
 	if (pid == 0)
 	{
+		path = ft_strdup(line[0]);
+		if (execve(path, line, g_env) == -1)
+		{
+			if (access(path, X_OK) == -1 && access(path, F_OK) == 0)
+				error_path(1, line[0]);
+			else if (access(path, X_OK) == 0)
+				error_path(1, line[0]);
+		}
+	}
+	if (pid == 0)
+	{
 		if (buf[0] != '\n')
 			print_error(buf);
 		exit(1);
 	}
-	if (pid == 0)
-	{
-		path = ft_strdup(line[0]);
-		if (execve(path, line, g_env) == -1)
-			error_path();
-	}
-
 	if (pid > 0)
 		wait(NULL);
 	return (1);
@@ -110,7 +114,7 @@ int		main(int ac, char **av, char **env)
 	(void)ac;
 	if (!env[0])
 		return (error_env());
-	g_env = env;
+	g_env = ft_tabdup(env);
 	v.pwd = ft_strdup(g_env[line_of_env("PWD")]);
 	v.home = ft_strdup(g_env[line_of_env("HOME")]);
 	v.path = ft_strdup(g_env[line_of_env("PATH")]);

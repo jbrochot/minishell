@@ -31,6 +31,26 @@ void rm_last(t_env *v)
 
 void add_last(char *str, t_env *v)
 {
-  v->pwd = ft_strjoin(v->pwd, "/");
-  v->pwd = ft_strjoin(v->pwd, str);
+  v->pwd = ft_strjoin_free(v->pwd, "/", 0);
+  v->pwd = ft_strjoin_free(v->pwd, str, 0);
+}
+
+int	ft_reset(t_env *v)
+{
+	if (line_of_env("PWD") > -1)
+  {
+    free(g_env[line_of_env("PWD")]);
+		g_env[line_of_env("PWD")] = ft_strdup(v->pwd);
+  }
+	if (line_of_env("HOME") > -1)
+  {
+    free(g_env[line_of_env("HOME")]);
+		g_env[line_of_env("HOME")] = ft_strdup(v->home);
+  }
+	if (line_of_env("PATH") > -1)
+  {
+    free(g_env[line_of_env("PATH")]);
+		g_env[line_of_env("PATH")] = ft_strdup(v->path);
+  }
+	return (1);
 }

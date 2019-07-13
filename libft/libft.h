@@ -6,7 +6,7 @@
 /*   By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 14:35:59 by jebrocho          #+#    #+#             */
-/*   Updated: 2019/04/21 18:47:50 by jebrocho         ###   ########.fr       */
+/*   Updated: 2019/07/13 15:48:12 by jebrocho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,6 @@ int					ft_is_prime(int nb);
 int					get_next_line(const int fd, char **line);
 
 int		ft_is_dir(char *s);
-
+char	**ft_tabdup(char **t);
 
 #endif

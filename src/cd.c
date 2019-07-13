@@ -25,6 +25,9 @@ int check_error(char **line, t_env *v)
   dir1  = opendir(cpy);
   if (dir1 == NULL && v->istir != 1)
     return (error_cd(cpy, 1));
+  if (v->istir == 0)
+    closedir(dir1);
+  free(cpy);
   return (0);
 }
 
@@ -53,16 +56,23 @@ int  new_path(char *path, t_env *v)
 {
   int   i;
   char  **s;
+  char  *tir;
 
   i = -1;
   if (path[0] == '/')
+  {
+    free(v->pwd);
     v->pwd = ft_strdup("PWD=/");
+  }
   if (path[0] == '-')
   {
     free(v->pwd);
     v->pwd = ft_strdup(g_env[line_of_env("OLDPWD")]);
-    change_env(get_env("PWD"), "OLDPWD", v);
-    change_env(get_env_val(v->pwd), "PWD", v);
+    tir = get_pwd();
+    change_env(tir, "OLDPWD", v);
+    tir = get_env_val(v->pwd);
+    change_env(tir, "PWD", v);
+    free(tir);
     v->istir = 0;
     return (1);
   }
@@ -84,19 +94,31 @@ int   ft_cd(char **line, t_env *v)
   char *l[3];
 
   parse_arg(line[1], '/', v);
-  l[1] = ft_strjoin("OLDPWD=", get_env_val(v->pwd));
+  l[1] = ft_strjoin_free("OLDPWD=", get_env_val(v->pwd), 1);
   l[0] = 0;
   l[2] = 0;
   if (line[1])
   {
     if (check_error(line, v) == -1)
+    {
+      free(line[1]);
+      free(line[0]);
+      free(l[1]);
       return (1);
+    }
     if (new_path(line[1], v) == 0)
       ft_setenv(l, v);
-//    parse_arg(v->pwd, '/');
   }
   else
     home(l, v);
-  line[1] != NULL ? chdir(get_env_val(v->pwd)) : chdir(get_env_val(v->home));
+  free(l[1]);
+  l[1] = get_env_val(v->pwd);
+  l[0] = get_env_val(v->home);
+  line[1] != NULL ? chdir(l[1]) : chdir(l[0]);
+  free(l[1]);
+  free(l[0]);
+  free(line[0]);
+  free(line[1]);
+  free(line);
   return (1);
 }

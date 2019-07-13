@@ -40,11 +40,12 @@ int   ft_unsetenv(char **line);
 void  ctrl(int signal);
 char  *get_pwd(void);
 char  *parse_error(char *s);
-void  new_env(char *l);
 int   error_env(void);
 int	  ft_reset(t_env *v);
 char  *get_env_val(char *str);
-void  error_path(void);
+void  error_path(int mod, char *line);
 int   error_cd(char *str, int mod);
+char  *ft_strjoin_free(char *s1, char *s2, int mod);
+int   free_tab(char **t);
 
 #endif

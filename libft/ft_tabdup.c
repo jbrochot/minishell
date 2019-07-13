@@ -1,39 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unsetenv.c                                         :+:      :+:    :+:   */
+/*   ft_tabdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/12 10:14:21 by jebrocho          #+#    #+#             */
-/*   Updated: 2019/06/12 10:14:37 by jebrocho         ###   ########.fr       */
+/*   Created: 2019/07/13 15:37:51 by jebrocho          #+#    #+#             */
+/*   Updated: 2019/07/13 15:46:02 by jebrocho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int   ft_unsetenv(char **line)
+char	**ft_tabdup(char **t)
 {
-  int i;
-  int j;
+	char **tab2;
+	int j;
 
-  i = 0;
-  while (line[++i])
-  {
-    j = line_of_env(line[i]);
-    if (j == -1)
-    {
-      ft_putstr_fd("can not unset environment\n", 2);
-      return (1);
-    }
-    free(g_env[j]);
-    while (g_env[j + 1])
-    {
-      g_env[j] = g_env[j + 1];
-      j++;
-    }
-    g_env[j] = NULL;
-    j = 0;
-  }
-  return (1);
+	j = -1;
+	while (t[++j]);
+	
+	if (!(tab2 = (char**)malloc(sizeof(char*) * (j + 1))))
+		return (NULL);
+	j = -1;
+	while(t[++j])
+		tab2[j] = ft_strdup(t[j]);
+	return (tab2);
 }

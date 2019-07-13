@@ -6,7 +6,7 @@
 #    By: jebrocho <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/08/19 21:42:39 by jebrocho          #+#    #+#              #
-#    Updated: 2019/04/26 15:24:52 by jebrocho         ###   ########.fr        #
+#    Updated: 2019/07/13 15:45:08 by jebrocho         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC = ft_atoi.c ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c \
 	  ft_strstr.c ft_strsub.c ft_strtrim.c ft_tolower.c ft_toupper.c ft_abs.c \
 	  ft_strrev.c ft_factorial.c ft_is_prime.c ft_lstadd.c ft_lstdel.c \
 	  ft_lstdelone.c ft_lstiter.c ft_lstmap.c ft_lstnew.c ft_power.c ft_sqrt.c \
-	  get_next_line.c ft_is_dir.c ft_len_tab.c
+	  get_next_line.c ft_is_dir.c ft_len_tab.c ft_tabdup.c
 
 OBJ = $(SRC:.c=.o)
 
